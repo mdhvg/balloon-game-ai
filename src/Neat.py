@@ -56,7 +56,7 @@ class neat_trainer():
         self.game.reset()
 
         # Last action
-        last_action = 0
+        # last_action = 0
 
         # Reward Counter
         reward = 0
@@ -72,14 +72,14 @@ class neat_trainer():
             action = action.index(max(action))
 
             # Step game
-            if action != last_action:
-                if action == 0:
-                    print("Action: Left")
-                elif action == 1:
-                    print("Action: Stay")
-                elif action == 2:
-                    print("Action: Right")
-                last_action = action
+            # if action != last_action:
+            #     if action == 0:
+            #         print("Action: Left")
+            #     elif action == 1:
+            #         print("Action: Stay")
+            #     elif action == 2:
+            #         print("Action: Right")
+            #     last_action = action
             self.game.step(action)
 
             # Render window
