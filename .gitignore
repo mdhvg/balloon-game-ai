@@ -1,0 +1,9 @@
+# pycache and venv files
+Lib
+Include
+Scripts
+*.cfg
+__pycache__
+
+# VSCode
+.vscode
