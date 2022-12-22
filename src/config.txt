@@ -1,12 +1,12 @@
 [NEAT]
-fitness_criterion     = max
-fitness_threshold     = 400
-pop_size              = 50
-reset_on_extinction   = False
+fitness_criterion     = min
+fitness_threshold     = 500
+pop_size              = 10
+reset_on_extinction   = True
 
 [DefaultStagnation]
-species_fitness_func = max
-max_stagnation       = 20
+species_fitness_func = mean
+max_stagnation       = 10
 species_elitism      = 2
 
 [DefaultReproduction]
@@ -17,7 +17,7 @@ survival_threshold = 0.2
 # node activation options
 activation_default      = relu
 activation_mutate_rate  = 1.0
-activation_options      = relu
+activation_options      = relu sigmoid lelu softplus
 
 # node aggregation options
 aggregation_default     = sum
@@ -25,7 +25,7 @@ aggregation_mutate_rate = 0.0
 aggregation_options     = sum
 
 # node bias options
-bias_init_mean          = 3.0
+bias_init_mean          = 0.0
 bias_init_stdev         = 1.0
 bias_max_value          = 30.0
 bias_min_value          = -30.0
@@ -46,7 +46,7 @@ enabled_default         = True
 enabled_mutate_rate     = 0.01
 
 feed_forward            = True
-initial_connection      = full_direct
+initial_connection      = partial_direct 0.5
 
 # node add/remove rates
 node_add_prob           = 0.2
