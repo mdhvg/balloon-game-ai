@@ -10,6 +10,7 @@ CascadiaCode = pygame.font.SysFont("Cascadia Code", 30)
 
 # Globals
 SCREEN_WIDTH, SCREEN_HEIGHT = 480, 640
+FPS = 60
 
 class neat_trainer():
     def __init__(self):
@@ -18,7 +19,7 @@ class neat_trainer():
         self.WIN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption("Rising Balloon")
         self.clock = pygame.time.Clock()
-        self.game = Game(self.WIN, self.clock, SCREEN_WIDTH, SCREEN_HEIGHT, 2)
+        self.game = Game(self.WIN, self.clock, SCREEN_WIDTH, SCREEN_HEIGHT, 2, FPS)
 
         # Load config file
         local_dir = os.path.dirname(__file__)
@@ -58,7 +59,7 @@ class neat_trainer():
         while not self.game.DEAD and not self.QUIT:
 
             # Tick clock
-            self.clock.tick(60)
+            self.clock.tick()
             
             # Calculate appropriate action for current state
             action = net.activate(self.game.get_state())

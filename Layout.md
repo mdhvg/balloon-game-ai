@@ -3,7 +3,7 @@ Game
 ~ Main Object
 
     step(direction) -> None
-    ~ Moves the ballon in direction [a, b, c] by SCREEN_WIDTH//BALLOON_WIDTH
+    ~ Moves the ballon in direction [a, b, c] by SCREEN_WIDTH/FPS
         - a: Left
         - b: None
         - c: Right

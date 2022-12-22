@@ -16,7 +16,6 @@ CascadiaCode = pygame.font.SysFont("Cascadia Code", 30)
 BUBBLE_WIDTH, BUBBLE_HEIGHT = 15, 15
 BALLOON_WIDTH, BALLOON_HEIGHT = 60, 60
 SPIKE_WIDTH, SPIKE_HEIGHT = 15, 30
-FPS = 60
 
 # Import image assets
 BALLOON_IMAGE = pygame.image.load(os.path.join("../Images", "Balloon.png"))
@@ -42,13 +41,14 @@ Spikes.collision = selfCollision
 Bubbles.collision = selfCollision
 
 class Game():
-    def __init__(self, WIN, CLOCK, SCREEN_WIDTH = 480, SCREEN_HEIGHT = 640, RISING_SPEED = 2):
+    def __init__(self, WIN, CLOCK, SCREEN_WIDTH = 480, SCREEN_HEIGHT = 640, RISING_SPEED = 2, FPS = 60):
         pygame.display.set_caption("Rising Balloon")
         self.WIN = WIN
         self.SCREEN_WIDTH = SCREEN_WIDTH
         self.SCREEN_HEIGHT = SCREEN_HEIGHT
         self.RISING_SPEED = RISING_SPEED
         self.CLOCK = CLOCK
+        self.FPS = FPS
     
     def reset(self):
         self.DEAD = False
@@ -98,9 +98,9 @@ class Game():
 
         # Move balloon in direction [left, none, right]
         if direction == 0:
-            self.balloon.moveIncrement(-BALLOON_WIDTH//2, self.SCREEN_WIDTH)
+            self.balloon.moveIncrement(-self.SCREEN_WIDTH/self.FPS, self.SCREEN_WIDTH)
         elif direction == 2:
-            self.balloon.moveIncrement(BALLOON_WIDTH//2, self.SCREEN_WIDTH)
+            self.balloon.moveIncrement(self.SCREEN_WIDTH/self.FPS, self.SCREEN_WIDTH)
 
     def get_state(self):
 
