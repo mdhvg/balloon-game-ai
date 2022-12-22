@@ -3,13 +3,13 @@ Game
 ~ Main Object
 
     step(direction) -> None
-    ~ Moves the ballon in direction [a, b, c] by BALLOON_WIDTH
+    ~ Moves the ballon in direction [a, b, c] by SCREEN_WIDTH//BALLOON_WIDTH
         - a: Left
         - b: None
         - c: Right
 
     get_state() -> [a, b, c, d, e, f]
-    ~ Returns the game_state in 4 variables:
+    ~ Returns the game_state in 6 variables:
         - a: balloon_x - next_bubble_x
         - b: balloon_y - next_bubble_y
         - c: balloon_x - next_spike_gap_x
