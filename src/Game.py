@@ -190,30 +190,28 @@ class Game():
                 x_distance = self.balloon.x - spike_array.gap_index*SPIKE_WIDTH
                 y_distance = self.balloon.y - spike_array.y
                 x_end_distance = self.balloon.x - (spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH
-                distance = math.sqrt(x_distance**2 + y_distance**2)
-                if distance < min_distance:
+                if y_distance < min_distance:
                     state_array[2] = x_distance
                     state_array[3] = y_distance
                     state_array[4] = x_end_distance
                     self.next_spike_start_line = Line((255,0,0), (self.balloon.x, self.balloon.y), (spike_array.gap_index*SPIKE_WIDTH, spike_array.y))
                     self.next_spike_end_line = Line((255,0,0), (self.balloon.x, self.balloon.y), ((spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH, spike_array.y))
-                    min_distance = distance
+                    min_distance = y_distance
         
-        min_distance = 1000
+        min_distance = -1000
         for spike_array in self.spikes:
             # Previous spike array
             if spike_array.y > self.balloon.y:
                 x_distance = self.balloon.x - spike_array.gap_index*SPIKE_WIDTH
                 y_distance = self.balloon.y - spike_array.y
                 x_end_distance = self.balloon.x - (spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH
-                distance = math.sqrt(x_distance**2 + y_distance**2)
-                if distance < min_distance:
+                if y_distance > min_distance:
                     state_array[5] = x_distance
                     state_array[6] = y_distance
                     state_array[7] = x_end_distance
                     self.prev_spike_start_line = Line((255,255,0), (self.balloon.x, self.balloon.y), (spike_array.gap_index*SPIKE_WIDTH, spike_array.y))
                     self.prev_spike_end_line = Line((255,255,0), (self.balloon.x, self.balloon.y), ((spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH, spike_array.y))
-                    min_distance = distance
+                    min_distance = y_distance
         
         return state_array
 
