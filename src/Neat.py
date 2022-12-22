@@ -58,6 +58,9 @@ class neat_trainer():
         # Last action
         last_action = 0
 
+        # Reward Counter
+        reward = 0
+
         # Run game while not dead
         while not self.game.DEAD and not self.QUIT:
 
@@ -85,6 +88,9 @@ class neat_trainer():
             # Update display
             pygame.display.update()
 
+            # Give reward for staying alive
+            reward += 0.1
+
             # Event listener
             for event in pygame.event.get():
 
@@ -94,7 +100,8 @@ class neat_trainer():
                     pygame.quit()
         
         # Return fitness
-        return self.game.score
+        reward += self.game.score
+        return reward
 
 if __name__ == "__main__":
     trainer = neat_trainer()
