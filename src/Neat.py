@@ -59,7 +59,7 @@ class neat_trainer():
         while not self.game.DEAD and not self.QUIT:
 
             # Tick clock
-            self.clock.tick()
+            self.clock.tick(FPS)
             
             # Calculate appropriate action for current state
             action = net.activate(self.game.get_state())
