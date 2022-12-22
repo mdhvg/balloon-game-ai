@@ -173,14 +173,14 @@ class Game():
 
         min_distance = 1000
         for bubble in self.bubbles:
-            x_distance = self.balloon.x - bubble.x
-            y_distance = self.balloon.y - bubble.y
-            distance = math.sqrt(x_distance**2 + y_distance**2)
-            if distance < min_distance and self.balloon.y>bubble.y:
-                state_array[0] = x_distance
-                state_array[1] = y_distance
-                self.next_bubble_line = Line((0,255,0), (self.balloon.x, self.balloon.y), (bubble.x, bubble.y))
-                min_distance = distance
+            if bubble.y < self.balloon.y:
+                x_distance = self.balloon.x - bubble.x
+                y_distance = self.balloon.y - bubble.y
+                if y_distance < min_distance and self.balloon.y>bubble.y:
+                    state_array[0] = x_distance
+                    state_array[1] = y_distance
+                    self.next_bubble_line = Line((0,255,0), (self.balloon.x, self.balloon.y), (bubble.x, bubble.y))
+                    min_distance = y_distance
         
         min_distance = 1000
         for spike_array in self.spikes:

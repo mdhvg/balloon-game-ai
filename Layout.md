@@ -8,7 +8,7 @@ Game
         - b: None
         - c: Right
 
-    get_state() -> [a, b, c, d, e, f, g]
+    get_state() -> [a, b, c, d, e, f, g, h]
     ~ Returns the game_state in 6 variables:
         - a: balloon_x - next_bubble_x
         - b: balloon_y - next_bubble_y
