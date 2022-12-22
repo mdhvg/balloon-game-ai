@@ -53,6 +53,13 @@ class Game():
     def reset(self):
         self.DEAD = False
 
+        # Set tracking lines
+        self.next_bubble_line = Line()
+        self.next_spike_start_line = Line()
+        self.next_spike_end_line = Line()
+        self.prev_spike_start_line = Line()
+        self.prev_spike_end_line = Line()
+
         # Set balloon parameters
         self.balloon = Balloon(self.SCREEN_WIDTH//2-(BALLOON_WIDTH//2) ,self.SCREEN_HEIGHT-200, BALLOON_WIDTH, BALLOON_HEIGHT, BALLOON_IMAGE)
 
@@ -75,6 +82,16 @@ class Game():
 
         # Clear screen
         self.WIN.fill(COLOR_WHITE)
+
+        # Draw tracking lines
+        if self.next_bubble_line != None:
+            print(self.next_bubble_line.start, self.next_bubble_line.color)
+            pygame.draw.line(self.WIN, self.next_bubble_line.color, self.next_bubble_line.start, self.next_bubble_line.end, 2)
+            pygame.draw.line(self.WIN, self.next_spike_start_line.color, self.next_spike_start_line.start, self.next_spike_start_line.end, 2)
+            pygame.draw.line(self.WIN, self.next_spike_end_line.color, self.next_spike_end_line.start, self.next_spike_end_line.end, 2)
+            pygame.draw.line(self.WIN, self.prev_spike_start_line.color, self.prev_spike_start_line.start, self.prev_spike_start_line.end, 2)
+            pygame.draw.line(self.WIN, self.prev_spike_end_line.color, self.prev_spike_end_line.start, self.prev_spike_end_line.end, 2)
+        
 
         # Draw bubbles
         for bubble in self.bubbles:
@@ -135,7 +152,7 @@ class Game():
             if spike_array.collision(self.balloon):
 
                 # Give negative reward
-                self.score -= 3
+                self.score -= 1
 
                 # Kill balloon
                 self.DEAD = True
@@ -153,7 +170,7 @@ class Game():
                 self.bubbles.remove(bubble)
 
         # Create state array
-        state_array = [0,0,0,0,0,0]
+        state_array = [0,0,0,0,0,0,0,0]
 
         min_distance = 1000
         for bubble in self.bubbles:
@@ -163,6 +180,7 @@ class Game():
             if distance < min_distance and self.balloon.y>bubble.y:
                 state_array[0] = x_distance
                 state_array[1] = y_distance
+                self.next_bubble_line = Line((0,255,0), (self.balloon.x, self.balloon.y), (bubble.x, bubble.y))
                 min_distance = distance
         
         min_distance = 1000
@@ -171,10 +189,14 @@ class Game():
             if spike_array.y < self.balloon.y:
                 x_distance = self.balloon.x - spike_array.gap_index*SPIKE_WIDTH
                 y_distance = self.balloon.y - spike_array.y
+                x_end_distance = self.balloon.x - (spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH
                 distance = math.sqrt(x_distance**2 + y_distance**2)
                 if distance < min_distance:
                     state_array[2] = x_distance
                     state_array[3] = y_distance
+                    state_array[4] = x_end_distance
+                    self.next_spike_start_line = Line((255,0,0), (self.balloon.x, self.balloon.y), (spike_array.gap_index*SPIKE_WIDTH, spike_array.y))
+                    self.next_spike_end_line = Line((255,0,0), (self.balloon.x, self.balloon.y), ((spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH, spike_array.y))
                     min_distance = distance
         
         min_distance = 1000
@@ -183,13 +205,25 @@ class Game():
             if spike_array.y > self.balloon.y:
                 x_distance = self.balloon.x - spike_array.gap_index*SPIKE_WIDTH
                 y_distance = self.balloon.y - spike_array.y
+                x_end_distance = self.balloon.x - (spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH
                 distance = math.sqrt(x_distance**2 + y_distance**2)
                 if distance < min_distance:
-                    state_array[4] = x_distance
-                    state_array[5] = y_distance
+                    state_array[5] = x_distance
+                    state_array[6] = y_distance
+                    state_array[7] = x_end_distance
+                    self.prev_spike_start_line = Line((255,255,0), (self.balloon.x, self.balloon.y), (spike_array.gap_index*SPIKE_WIDTH, spike_array.y))
+                    self.prev_spike_end_line = Line((255,255,0), (self.balloon.x, self.balloon.y), ((spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH, spike_array.y))
                     min_distance = distance
         
         return state_array
+
+class Line():
+    def __init__(self, color = (255,255,255), start = (0,0), end = (0,0)) -> None:
+        self.color = color
+        self.start = start
+        self.end = end
+        pass
+
 
 if __name__ == "__main__":
     WIN = pygame.display.set_mode((480, 640))
