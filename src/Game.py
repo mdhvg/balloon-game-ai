@@ -85,7 +85,6 @@ class Game():
 
         # Draw tracking lines
         if self.next_bubble_line != None:
-            print(self.next_bubble_line.start, self.next_bubble_line.color)
             pygame.draw.line(self.WIN, self.next_bubble_line.color, self.next_bubble_line.start, self.next_bubble_line.end, 2)
             pygame.draw.line(self.WIN, self.next_spike_start_line.color, self.next_spike_start_line.start, self.next_spike_start_line.end, 2)
             pygame.draw.line(self.WIN, self.next_spike_end_line.color, self.next_spike_end_line.start, self.next_spike_end_line.end, 2)

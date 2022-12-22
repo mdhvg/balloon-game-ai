@@ -55,6 +55,9 @@ class neat_trainer():
         # Reset game
         self.game.reset()
 
+        # Last action
+        last_action = 0
+
         # Run game while not dead
         while not self.game.DEAD and not self.QUIT:
 
@@ -63,10 +66,18 @@ class neat_trainer():
             
             # Calculate appropriate action for current state
             action = net.activate(self.game.get_state())
+            action = action.index(max(action))
 
             # Step game
-            print(action.index(max(action)))
-            self.game.step(action.index(max(action)))
+            if action != last_action:
+                if action == 0:
+                    print("Action: Left")
+                elif action == 1:
+                    print("Action: Stay")
+                elif action == 2:
+                    print("Action: Right")
+                last_action = action
+            self.game.step(action)
 
             # Render window
             self.game.render_window()
