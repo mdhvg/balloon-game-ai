@@ -98,9 +98,9 @@ class Game():
 
         # Move balloon in direction [left, none, right]
         if direction == 0:
-            self.balloon.moveIncrement(-self.SCREEN_WIDTH/self.FPS, self.SCREEN_WIDTH)
+            self.balloon.moveIncrement(-self.SCREEN_WIDTH/self.FPS, self.SCREEN_WIDTH, BALLOON_WIDTH)
         elif direction == 2:
-            self.balloon.moveIncrement(self.SCREEN_WIDTH/self.FPS, self.SCREEN_WIDTH)
+            self.balloon.moveIncrement(self.SCREEN_WIDTH/self.FPS, self.SCREEN_WIDTH, BALLOON_WIDTH)
 
     def get_state(self):
 

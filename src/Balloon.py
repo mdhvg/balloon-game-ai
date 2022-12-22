@@ -12,6 +12,7 @@ class Balloon():
     def draw(self, win):
         win.blit(self.image, (self.x,self.y))
     
-    def moveIncrement(self, x, SCREEN_WIDTH):
-        if self.x+x<SCREEN_WIDTH and self.x+x>0:
+    def moveIncrement(self, x, SCREEN_WIDTH, BALLOON_WIDTH):
+        if self.x+x+BALLOON_WIDTH<SCREEN_WIDTH and self.x+x>0:
             self.x += x
+        
