@@ -142,8 +142,8 @@ class Game():
         
         # Increase score on collision between balloon and bubble and remove bubble
         for bubble in self.bubbles:
-            if bubble.collision(self.balloon):
-                self.score += 0.01
+            if bubble.collision(self.balloon) and self.score > 0:
+                self.score += 0.01*self.score
                 self.bubbles.remove(bubble)
 
         # Check if balloon collides with spikes
@@ -205,7 +205,7 @@ class Game():
             # Previous spike array
             if spike_array.y > self.balloon.y:
                 x_distance = self.balloon.x - spike_array.gap_index*SPIKE_WIDTH
-                y_distance = self.balloon.y - spike_array.y - BALLOON_HEIGHT
+                y_distance = self.balloon.y - spike_array.y + BALLOON_HEIGHT
                 x_end_distance = self.balloon.x+BALLOON_WIDTH - (spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH
                 if y_distance > min_distance:
                     state_array[3] = x_distance
@@ -215,10 +215,16 @@ class Game():
                     self.prev_spike_end_line = Line((255,255,0), (self.balloon.x+BALLOON_WIDTH, self.balloon.y+BALLOON_HEIGHT), ((spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH, spike_array.y))
                     min_distance = y_distance
 
+        if state_array[7] < 0:
+            state_array[3] = 1
+            state_array[4] = 1
+            state_array[7] = 1
+
         if state_array[1] != 1:
             if state_array[1] < 0 or state_array[2] > 0:
                 self.score -= 0.1
         if state_array[3] != 1:
+            print(state_array[3], state_array[4])
             if state_array[3] < 0 or state_array[4] > 0:
                 self.score -= 0.1
 
