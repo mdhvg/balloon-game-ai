@@ -224,7 +224,6 @@ class Game():
             if state_array[1] < 0 or state_array[2] > 0:
                 self.score -= 0.1
         if state_array[3] != 1:
-            print(state_array[3], state_array[4])
             if state_array[3] < 0 or state_array[4] > 0:
                 self.score -= 0.1
 
