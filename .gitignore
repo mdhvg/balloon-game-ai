@@ -4,6 +4,11 @@ Include
 Scripts
 *.cfg
 __pycache__
+bin
+lib
+include
+lib64
+checkpoints
 
 # VSCode
 .vscode
