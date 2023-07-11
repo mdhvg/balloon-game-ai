@@ -47,9 +47,6 @@ class neat_trainer():
 
     def train(self):
 
-        # Run NEAT
-        self.winner = self.Population.run(self.eval_genomes, 10)
-
         # Run NEAT until solution is found
         self.winner = self.Population.run(self.eval_genomes)
 
