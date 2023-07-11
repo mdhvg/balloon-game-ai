@@ -115,7 +115,7 @@ class Game():
         # Move balloon in direction [left, none, right]
         if direction == 0:
             self.balloon.moveIncrement(-self.SCREEN_WIDTH/self.FPS, self.SCREEN_WIDTH, BALLOON_WIDTH)
-        elif direction == 2:
+        if direction == 2:
             self.balloon.moveIncrement(self.SCREEN_WIDTH/self.FPS, self.SCREEN_WIDTH, BALLOON_WIDTH)
 
     def get_state(self):
@@ -143,7 +143,7 @@ class Game():
         # Increase score on collision between balloon and bubble and remove bubble
         for bubble in self.bubbles:
             if bubble.collision(self.balloon):
-                self.score += 1
+                self.score += 0.01
                 self.bubbles.remove(bubble)
 
         # Check if balloon collides with spikes
@@ -151,7 +151,7 @@ class Game():
             if spike_array.collision(self.balloon):
 
                 # Give negative reward
-                self.score -= 1
+                self.score -= 10
 
                 # Kill balloon
                 self.DEAD = True
@@ -169,49 +169,64 @@ class Game():
                 self.bubbles.remove(bubble)
 
         # Create state array
-        state_array = [0,0,0,0,0,0,0,0]
+        state_array = [1,1,1,1,1,1,1,1]
 
+        # Find next bubble
         min_distance = 1000
         for bubble in self.bubbles:
             if bubble.y < self.balloon.y:
                 x_distance = self.balloon.x - bubble.x
                 y_distance = self.balloon.y - bubble.y
-                if y_distance < min_distance and self.balloon.y>bubble.y:
+                if y_distance < min_distance:
                     state_array[0] = x_distance
-                    state_array[1] = y_distance
-                    self.next_bubble_line = Line((0,255,0), (self.balloon.x, self.balloon.y), (bubble.x, bubble.y))
+                    state_array[5] = y_distance
                     min_distance = y_distance
+                    self.next_bubble_line = Line((0,255,0), (self.balloon.x, self.balloon.y), (bubble.x, bubble.y))
         
+        # Find next spike
         min_distance = 1000
         for spike_array in self.spikes:
             # Next spike array
             if spike_array.y < self.balloon.y:
                 x_distance = self.balloon.x - spike_array.gap_index*SPIKE_WIDTH
-                y_distance = self.balloon.y - spike_array.y
-                x_end_distance = self.balloon.x - (spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH
+                y_distance = (self.balloon.y - spike_array.y) - SPIKE_HEIGHT
+                x_end_distance = self.balloon.x+BALLOON_WIDTH - (spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH
                 if y_distance < min_distance:
-                    state_array[2] = x_distance
-                    state_array[3] = y_distance
-                    state_array[4] = x_end_distance
-                    self.next_spike_start_line = Line((255,0,0), (self.balloon.x, self.balloon.y), (spike_array.gap_index*SPIKE_WIDTH, spike_array.y))
-                    self.next_spike_end_line = Line((255,0,0), (self.balloon.x, self.balloon.y), ((spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH, spike_array.y))
+                    state_array[1] = x_distance
+                    state_array[2] = x_end_distance
+                    state_array[6] = y_distance
+                    self.next_spike_start_line = Line((255,0,0), (self.balloon.x, self.balloon.y), (spike_array.gap_index*SPIKE_WIDTH, spike_array.y+SPIKE_HEIGHT))
+                    self.next_spike_end_line = Line((255,0,0), (self.balloon.x + BALLOON_WIDTH, self.balloon.y), ((spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH, spike_array.y+SPIKE_HEIGHT))
                     min_distance = y_distance
         
+        # Find previous spike
         min_distance = -1000
         for spike_array in self.spikes:
             # Previous spike array
             if spike_array.y > self.balloon.y:
                 x_distance = self.balloon.x - spike_array.gap_index*SPIKE_WIDTH
-                y_distance = self.balloon.y - spike_array.y
-                x_end_distance = self.balloon.x - (spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH
+                y_distance = self.balloon.y - spike_array.y - BALLOON_HEIGHT
+                x_end_distance = self.balloon.x+BALLOON_WIDTH - (spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH
                 if y_distance > min_distance:
-                    state_array[5] = x_distance
-                    state_array[6] = y_distance
-                    state_array[7] = x_end_distance
-                    self.prev_spike_start_line = Line((255,255,0), (self.balloon.x, self.balloon.y), (spike_array.gap_index*SPIKE_WIDTH, spike_array.y))
-                    self.prev_spike_end_line = Line((255,255,0), (self.balloon.x, self.balloon.y), ((spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH, spike_array.y))
+                    state_array[3] = x_distance
+                    state_array[4] = x_end_distance
+                    state_array[7] = y_distance
+                    self.prev_spike_start_line = Line((255,255,0), (self.balloon.x, self.balloon.y + BALLOON_HEIGHT), (spike_array.gap_index*SPIKE_WIDTH, spike_array.y))
+                    self.prev_spike_end_line = Line((255,255,0), (self.balloon.x+BALLOON_WIDTH, self.balloon.y+BALLOON_HEIGHT), ((spike_array.gap_index+spike_array.gap_length)*SPIKE_WIDTH, spike_array.y))
                     min_distance = y_distance
-        
+
+        if state_array[1] != 1:
+            if state_array[1] < 0 or state_array[2] > 0:
+                self.score -= 0.1
+        if state_array[3] != 1:
+            if state_array[3] < 0 or state_array[4] > 0:
+                self.score -= 0.1
+
+        for state in state_array[:5]:
+            state/=self.SCREEN_WIDTH
+        for state in state_array[5:]:
+            state/=self.SCREEN_HEIGHT
+
         return state_array
 
 class Line():

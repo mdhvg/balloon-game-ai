@@ -6,7 +6,7 @@ from Game import Game
 # Initialize pygame
 pygame.init()
 pygame.font.init()
-CascadiaCode = pygame.font.SysFont("Cascadia Code", 30)
+CascadiaCode = pygame.font.SysFont("Fira Code", 30)
 
 # Globals
 SCREEN_WIDTH, SCREEN_HEIGHT = 480, 640
@@ -16,6 +16,7 @@ class neat_trainer():
     def __init__(self):
 
         # Make main window
+        self.Population = None
         self.WIN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption("Rising Balloon")
         self.clock = pygame.time.Clock()
@@ -26,11 +27,20 @@ class neat_trainer():
         config_path = os.path.join(local_dir, "config.txt")
         self.config = neat.config.Config(neat.DefaultGenome, neat.DefaultReproduction, neat.DefaultSpeciesSet, neat.DefaultStagnation, config_path)
 
-        # Create population
-        self.Population = neat.Population(self.config)
+        # Load checkpoint
+        latest = 0
+        for file in os.listdir("checkpoints"):
+            if file.startswith("cp_"):
+                latest = max(latest, int(file[3:]))
+        if latest > 0:
+            self.Population = neat.Checkpointer.restore_checkpoint("checkpoints/cp_" + str(latest))
+
+        # Otherwise create new population
+        if self.Population is None:
+            self.Population = neat.Population(self.config)
         self.Population.add_reporter(neat.StdOutReporter(True))
         self.Population.add_reporter(neat.StatisticsReporter())
-        self.Population.add_reporter(neat.Checkpointer(1))
+        self.Population.add_reporter(neat.Checkpointer(1, filename_prefix="checkpoints/cp_"))
 
         # QUIT check
         self.QUIT = False
@@ -46,6 +56,7 @@ class neat_trainer():
         for genome_id, genome in genomes:
             if not self.QUIT:
                 genome.fitness = self.eval_genome(genome, config)
+            print("Genome ID: " + str(genome_id) + " Fitness: " + str(genome.fitness))
 
     def eval_genome(self, genome, config):
 
@@ -104,5 +115,7 @@ class neat_trainer():
         return reward
 
 if __name__ == "__main__":
+    os.chdir(os.path.dirname(__file__))
+    os.makedirs("checkpoints", exist_ok=True)
     trainer = neat_trainer()
     trainer.train()
