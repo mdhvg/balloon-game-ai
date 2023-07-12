@@ -71,7 +71,7 @@ class neat_trainer():
         # last_action = 0
 
         # Reward Counter
-        reward = 0
+        # reward = 0
 
         # Run game while not dead
         while not self.game.DEAD and not self.QUIT:
@@ -93,6 +93,7 @@ class neat_trainer():
             #         print("Action: Right")
             #     last_action = action
             genome.fitness = self.game.step(action)
+            genome.fitness += 0.1
 
             # Render window
             self.game.render_window()
