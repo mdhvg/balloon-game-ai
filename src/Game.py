@@ -169,7 +169,7 @@ class Game():
                 self.bubbles.remove(bubble)
 
         # Create state array
-        state_array = [1,1,1,1,1,1,1,1]
+        state_array = [self.SCREEN_WIDTH,self.SCREEN_WIDTH,self.SCREEN_WIDTH,self.SCREEN_WIDTH,self.SCREEN_WIDTH,self.SCREEN_HEIGHT,self.SCREEN_HEIGHT,self.SCREEN_HEIGHT]
 
         # Find next bubble
         min_distance = 1000
@@ -216,16 +216,17 @@ class Game():
                     min_distance = y_distance
 
         if state_array[7] < 0:
-            state_array[3] = 1
-            state_array[4] = 1
-            state_array[7] = 1
+            state_array[3] = self.SCREEN_WIDTH
+            state_array[4] = self.SCREEN_WIDTH
+            state_array[7] = self.SCREEN_HEIGHT
 
-        if state_array[1] != 1:
-            if state_array[1] < 0 or state_array[2] > 0:
-                self.score -= 0.1
-        if state_array[3] != 1:
-            if state_array[3] < 0 or state_array[4] > 0:
-                self.score -= 0.1
+        if state_array[1] != self.SCREEN_WIDTH:
+            if state_array[3] != self.SCREEN_WIDTH:
+                if state_array[3] < 0 or state_array[4] > 0:
+                    self.score -= 0.1
+            else:
+                if state_array[1] < 0 or state_array[2] > 0:
+                    self.score -= 0.1
 
         for state in state_array[:5]:
             state/=self.SCREEN_WIDTH
