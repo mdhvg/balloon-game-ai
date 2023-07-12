@@ -117,6 +117,7 @@ class Game():
             self.balloon.moveIncrement(-self.SCREEN_WIDTH/self.FPS, self.SCREEN_WIDTH, BALLOON_WIDTH)
         if direction == 2:
             self.balloon.moveIncrement(self.SCREEN_WIDTH/self.FPS, self.SCREEN_WIDTH, BALLOON_WIDTH)
+        return self.score
 
     def get_state(self):
 
@@ -228,10 +229,10 @@ class Game():
                 if state_array[1] < 0 or state_array[2] > 0:
                     self.score -= 0.1
 
-        for state in state_array[:5]:
-            state/=self.SCREEN_WIDTH
-        for state in state_array[5:]:
-            state/=self.SCREEN_HEIGHT
+        for i in range(5):
+            state_array[i]/=self.SCREEN_WIDTH
+        for i in range(5,8):
+            state_array[i]/=self.SCREEN_HEIGHT
 
         return state_array
 

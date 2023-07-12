@@ -1,7 +1,7 @@
 [NEAT]
 fitness_criterion     = min
 fitness_threshold     = 500
-pop_size              = 5
+pop_size              = 20
 reset_on_extinction   = True
 
 [DefaultStagnation]
@@ -21,7 +21,7 @@ activation_options      = relu sigmoid
 
 # node aggregation options
 aggregation_default     = sum
-aggregation_mutate_rate = 0.0
+aggregation_mutate_rate = 0.1
 aggregation_options     = sum
 
 # node bias options
@@ -53,7 +53,7 @@ node_add_prob           = 0.2
 node_delete_prob        = 0.2
 
 # network parameters
-num_hidden              = 0
+num_hidden              = 2
 num_inputs              = 8
 num_outputs             = 3
 

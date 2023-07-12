@@ -40,7 +40,7 @@ class neat_trainer():
             self.Population = neat.Population(self.config)
         self.Population.add_reporter(neat.StdOutReporter(True))
         self.Population.add_reporter(neat.StatisticsReporter())
-        self.Population.add_reporter(neat.Checkpointer(1, filename_prefix="checkpoints/cp_"))
+        self.Population.add_reporter(neat.Checkpointer(10, filename_prefix="checkpoints/cp_"))
 
         # QUIT check
         self.QUIT = False
@@ -56,7 +56,7 @@ class neat_trainer():
         # Loop over all genomes in population
         for genome_id, genome in genomes:
             if not self.QUIT:
-                genome.fitness = self.eval_genome(genome, config)
+                self.eval_genome(genome, config)
             print("Genome ID: " + str(genome_id) + " Fitness: " + str(genome.fitness))
 
     def eval_genome(self, genome, config):
@@ -92,7 +92,7 @@ class neat_trainer():
             #     elif action == 2:
             #         print("Action: Right")
             #     last_action = action
-            self.game.step(action)
+            genome.fitness = self.game.step(action)
 
             # Render window
             self.game.render_window()
@@ -101,7 +101,7 @@ class neat_trainer():
             pygame.display.update()
 
             # Give reward for staying alive
-            reward += 0.1
+            # genome.fitness += 0.1
 
             # Event listener
             for event in pygame.event.get():
