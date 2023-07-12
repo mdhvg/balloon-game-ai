@@ -113,8 +113,8 @@ class neat_trainer():
                     pygame.quit()
         
         # Return fitness
-        reward += self.game.score
-        return reward
+        # reward += self.game.score
+        # return reward
 
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
